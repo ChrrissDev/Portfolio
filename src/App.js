@@ -14,8 +14,11 @@ export default function App() {
   const [dark, setDark] = useState(true);
   const formRef = useRef();
   const [visibleSkills, setVisibleSkills] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false);
 
-  // === SKILLS ===
+  const toggleMenu = () => setMenuOpen(!menuOpen);
+  const closeMenu = () => setMenuOpen(false);
+
   const skills = [
     {
       category: "Front-End",
@@ -64,7 +67,6 @@ export default function App() {
     }
   ];
 
-  // === PROJECTS ===
   const projects = [
     {
       title: "1Check - Hotel & Facility Management SaaS",
@@ -104,7 +106,6 @@ export default function App() {
     }
   ];
 
-  // === Progress Bar Animation ===
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -117,7 +118,6 @@ export default function App() {
     return () => observer.disconnect();
   }, []);
 
-  // === EmailJS ===
   const sendEmail = (e) => {
     e.preventDefault();
     emailjs
@@ -135,38 +135,81 @@ export default function App() {
 
   return (
     <div className={dark ? "app dark" : "app light"}>
-      {/* HEADER */}
       <header className="header">
         <div className="logo">Portfolio</div>
-        <nav>
-          <a href="#hero">Home</a>
-          <a href="#skills">Skills</a>
-          <a href="#projects">Projects</a>
-          <a href="#experience">Experience</a>
-          <a href="#contact">Contact</a>
+
+        <nav className={`nav ${menuOpen ? "open" : ""}`}>
+          <a href="#hero" onClick={closeMenu}>Home</a>
+          <a href="#skills" onClick={closeMenu}>Skills</a>
+          <a href="#projects" onClick={closeMenu}>Projects</a>
+          <a href="#experience" onClick={closeMenu}>Experience</a>
+          <a href="#contact" onClick={closeMenu}>Contact</a>
         </nav>
+
         <button onClick={() => setDark(!dark)} className="theme-toggle">
           {dark ? "☀️" : "🌙"}
         </button>
+
+        <button
+          className={`burger ${menuOpen ? "open" : ""}`}
+          onClick={toggleMenu}
+          aria-label="Toggle menu"
+          aria-expanded={menuOpen}
+        >
+          <span />
+          <span />
+          <span />
+        </button>
       </header>
 
-      {/* HERO */}
       <section className="hero" id="hero">
-        <motion.h1 initial={{ opacity: 0, y: -30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 1 }}>
-          Christopher Masson
-        </motion.h1>
-        <motion.h2 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.3 }}>
-          Web & Mobile Developer
-        </motion.h2>
-        <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.6 }}>
-          Available for freelance missions and full-time positions
-        </motion.p>
-        <motion.a href="#contact" className="btn" whileHover={{ scale: 1.05 }}>
-          Contact Me
-        </motion.a>
+        <div className="hero-content">
+          <div className="hero-text">
+            <motion.h1
+              initial={{ opacity: 0, y: -30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 1 }}
+              className="hero-title"
+            >
+              Christopher Masson
+            </motion.h1>
+            <motion.h2
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="hero-subtitle"
+            >
+              Web & Mobile Developer
+            </motion.h2>
+            <motion.p
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.6 }}
+              className="hero-description"
+            >
+              Available for freelance missions and full-time positions
+            </motion.p>
+            <motion.a
+              href="#contact"
+              className="btn hero-btn"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Contact Me
+            </motion.a>
+          </div>
+
+          <div className="hero-image-wrapper">
+            <img
+              src={process.env.PUBLIC_URL + "/assets/me_dessin.png"}
+              alt="Portrait Dessiné"
+              className="hero-image"
+              draggable={false}
+            />
+          </div>
+        </div>
       </section>
 
-      {/* SKILLS */}
       <section className="services" id="skills">
         <h3>Skills</h3>
         <div className="skills-grid">
@@ -191,7 +234,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* PROJECTS */}
       <section className="portfolio" id="projects">
         <h3>Projects</h3>
         <div className="grid">
@@ -229,7 +271,6 @@ export default function App() {
         </div>
       </section>
 
-      {/* EXPERIENCE */}
       <section className="experience" id="experience">
         <h3>Experience</h3>
         <ul>
@@ -237,7 +278,7 @@ export default function App() {
             <div className="exp-header">
               <img src={process.env.PUBLIC_URL + "/assets/1check.png"} alt="1Check" className="exp-logo" />
               <div>
-                <b className="exp-date">2023 - 2026 :</b> MSc Pro Software Engineering
+                <b className="exp-date">2023 - 2025 :</b> Developer fullstack
                 <div className="exp-company">1Check</div>
               </div>
             </div>
@@ -269,11 +310,11 @@ export default function App() {
             <div className="exp-header">
               <img src={process.env.PUBLIC_URL + "/assets/md.png"} alt="Monaco Digital" className="exp-logo" />
               <div>
-                <b className="exp-date">2021 - 2023 :</b> Web & Mobile Integrator - Epitech
+                <b className="exp-date">2021 - 2022 :</b> Developer fullstack
                 <div className="exp-company">Monaco Digital</div>
               </div>
             </div>
-            <span className="exp-role">Apprenticeship (Apr 2021 - Mar 2023)</span>
+            <span className="exp-role">Apprenticeship (Jan 2021 - Mar 2022)</span>
             <ul className="exp-details">
               <li>Designed and implemented database structures for scalable applications.</li>
               <li>Created modern UI/UX mockups in Figma and integrated them into responsive apps.</li>
@@ -284,7 +325,45 @@ export default function App() {
         </ul>
       </section>
 
-      {/* CONTACT */}
+      <section className="experience" id="experience">
+        <h3>Education</h3>
+        <ul>
+          <li>
+            <div className="exp-header">
+              <img src={process.env.PUBLIC_URL + "/assets/epitech.png"} alt="Epitech" className="exp-logo" />
+              <div>
+                <b className="exp-date">2022 - 2025 :</b> MSc Pro
+                <div className="exp-company">Epitech</div>
+              </div>
+            </div>
+            <span className="exp-role">Advanced projects & expert learning</span>
+            <ul className="exp-details">
+              <li>Developed a 3D educational platform with Three.js to introduce children to programming.</li>
+              <li>Designed AI algorithms for medical analysis: classification of lung images (healthy, viral, bacterial).</li>
+              <li>Managed complex team projects with advanced software architecture and continuous integration.</li>
+              <li>Implemented secure REST APIs and cross-platform mobile applications (React Native / Flutter).</li>
+            </ul>
+          </li>
+
+          <li>
+            <div className="exp-header">
+              <img src={process.env.PUBLIC_URL + "/assets/epitech.png"} alt="Epitech" className="exp-logo" />
+              <div>
+                <b className="exp-date">2020 - 2022 :</b> Web & Mobile Integrator
+                <div className="exp-company">Epitech</div>
+              </div>
+            </div>
+            <span className="exp-role">Apprenticeship (Jan 2021 - Mar 2022)</span>
+            <ul className="exp-details">
+              <li>Built foundational projects: Connect Four game, calculator, simple e-commerce website.</li>
+              <li>Basic front-end and back-end development with database integration.</li>
+              <li>Introduced to best development practices and version control with Git.</li>
+              <li>First deployments on servers and working in agile teams.</li>
+            </ul>
+          </li>
+        </ul>
+      </section>
+
       <section className="contact" id="contact">
         <h3>Contact</h3>
         <form ref={formRef} onSubmit={sendEmail}>
